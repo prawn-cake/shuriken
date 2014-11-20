@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Shuriken
 =============
 Shuriken is a monitoring agent which allows to do passive checks for Shuriken monitoring system vie mod-ws-arbiter.
@@ -13,4 +14,6 @@ Description
 ------------
 
 Goes here
+=======
 
+>>>>>>> 31d7e7db164dadf855c537e0373835d8424dc88e

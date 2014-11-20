@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from shuriken.app.agent import (
+
+from shuriken.agent import (
     MonitoringCheck, ForbiddenCheckError, ConfigReader, Config,
     MonitoringCheckResult
 )

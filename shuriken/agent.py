@@ -8,8 +8,9 @@ import logging
 import socket
 from urllib import urlencode
 import json
+
 import os.path as op
-from config import LOG_PATH, HTTP_TIMEOUT
+from shuriken.config import LOG_PATH, HTTP_TIMEOUT
 import requests
 import re
 
