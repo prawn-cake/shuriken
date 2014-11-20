@@ -1,6 +1,6 @@
 Shuriken
 =============
-Shuriken is a monitoring agent which allows to do passive checks for Shuriken monitoring system vie mod-ws-arbiter.
+Shuriken is a monitoring agent which allows to do passive checks for Shinken monitoring system via mod-ws-arbiter.
 
 For more information see https://github.com/shinken-monitoring/mod-ws-arbiter
 
