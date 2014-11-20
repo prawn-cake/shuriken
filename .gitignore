@@ -1,0 +1,9 @@
+﻿*.deb
+*\.deb
+*.py[co]
+*.mo
+.ropeproject
+.idea
+*.sqlite3
+*.DS_Store
+.env/*
