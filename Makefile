@@ -15,12 +15,10 @@ test:
 	@$(PYTHON) -m unittest discover
 
 
-# target: deb - Build deb package
-deb: test
-	@find . -name '*.pyc'|xargs rm -f
-	@debuild clean
-	@debuild -i -us -uc -b
-	@debuild clean
+.PHONY: test_ci
+# target: test_ci - Run tests command adapt for CI systems
+test_ci:
+	@python -m unittest discover
 
 
 $(ENV): requirements.txt
