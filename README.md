@@ -1,5 +1,7 @@
 Shuriken
 =============
+[![Build Status](https://travis-ci.org/prawn-cake/shuriken.svg?branch=master)](https://travis-ci.org/prawn-cake/shuriken)
+
 Shuriken is a monitoring agent which allows to do passive checks for Shinken monitoring system via mod-ws-arbiter.
 
 For more information see https://github.com/shinken-monitoring/mod-ws-arbiter
