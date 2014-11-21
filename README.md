@@ -1,4 +1,4 @@
-Shuriken
+![ShurikenIcon](https://cdn1.iconfinder.com/data/icons/iconbeast-lite/30/shuriken.png) Shuriken
 =============
 [![Build Status](https://travis-ci.org/prawn-cake/shuriken.svg?branch=master)](https://travis-ci.org/prawn-cake/shuriken)
 
