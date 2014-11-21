@@ -6,10 +6,11 @@
     "username": "anonymous",
     "password": "qwerty"
   },
+  "plugins_dir": "/usr/lib/nagios/plugins",
   "commands": {
-    "Disk/": "/usr/lib/nagios/plugins/check_disk -w 10% -c 5% -p /",
-    "Load": "/usr/lib/nagios/plugins/check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
-    "Memory": "/usr/lib/nagios/plugins/check_mem -f -w 10 -c 5",
-    "Swap": "/usr/lib/nagios/plugins/check_swap -a -w50% -c10%"
+    "Disk/": "check_disk -w 10% -c 5% -p /",
+    "Load": "check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
+    "Memory": "check_mem -f -w 10 -c 5",
+    "Swap": "check_swap -a -w50% -c10%"
   }
 }

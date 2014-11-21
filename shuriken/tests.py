@@ -53,11 +53,12 @@ class ConfigTestCase(unittest.TestCase):
             "user": "",
             "password": ""
           },
+          "plugins_dir": "/tmp",
           "commands": {
-            "Disk/": "/usr/lib/nagios/plugins/check_disk -w 10% -c 5% -p /",
-            "Load": "/usr/lib/nagios/plugins/check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
-            "Memory": "/usr/lib/nagios/plugins/check_mem -f -w 10 -c 5",
-            "Swap": "/usr/lib/nagios/plugins/check_swap -a -w50% -c10%"
+            "Disk/": "check_disk -w 10% -c 5% -p /",
+            "Load": "check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
+            "Memory": "check_mem -f -w 10 -c 5",
+            "Swap": "check_swap -a -w50% -c10%"
           }
         }
         """
@@ -65,6 +66,7 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsInstance(config, Config)
         self.assertIsInstance(config.server, dict)
         self.assertIsInstance(config.commands, dict)
+        self.assertTrue(config.plugins_dir)
         # check parameters
         self.assertEqual(config.server['port'], 7760)
         self.assertEqual(
@@ -76,3 +78,4 @@ class ConfigTestCase(unittest.TestCase):
         monitoring_checks = config.get_monitoring_checks()
         for check in monitoring_checks:
             self.assertIsInstance(check, MonitoringCheck)
+            self.assertIn('/tmp/', check.command)
