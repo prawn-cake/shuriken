@@ -56,7 +56,9 @@ class MonitoringCheck(object):
         :param is_mock: for tests
         """
         logger.debug(
-            "Registered new MonitoringCheck '{}' --> '{}'".format(service, command))
+            "Registered new MonitoringCheck '{}' --> '{}'"
+            "".format(service, command)
+        )
         self.hostname = hostname
         self.service = service
         self.command = command
@@ -314,5 +316,5 @@ if __name__ == '__main__':
         agent = MonitoringAgent(config)
         agent.run()
     else:
-        print("USAGE: python {} -H <host> -S <desc> -C <cmd> --log <path_to_log>"
-              "".format(op.basename(__file__)))
+        print("USAGE: python {} -H <host> -S <desc> -C <cmd> "
+              "--log <path_to_log>".format(op.basename(__file__)))
