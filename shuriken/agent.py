@@ -12,6 +12,7 @@ import json
 import os.path as op
 import requests
 import re
+import glob
 
 
 DEFAULT_HTTP_TIMEOUT = 120
@@ -166,6 +167,9 @@ class Config(object):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+        self.plugins_idx = {}
+        self._inspect_plugins_dirs()
+
     @property
     def server_url(self):
         server_cfg = getattr(self, 'server', {})
@@ -175,24 +179,57 @@ class Config(object):
             location=server_cfg['location'],
         )
 
+    def _inspect_plugins_dirs(self):
+        """Validate config plugins directories. Check for existence.
+        And build plugins_idx
+
+        :raise IOError:
+        """
+        plugins_dirs = getattr(self, 'plugins_dirs')
+        wrong_dirs = []
+        for _dir in plugins_dirs:
+            if not op.isdir(_dir):
+                wrong_dirs.append(_dir)
+            else:
+                # NOTE: if there will be plugins with the same name,
+                # last founded will be executed
+                self.plugins_idx.update(self._get_plugins_in_directory(_dir))
+
+        if wrong_dirs:
+            raise IOError('Wrong plugins_dirs: {}'.format(wrong_dirs))
+
+    @classmethod
+    def _get_plugins_in_directory(cls, _dir):
+        files = glob.glob('/'.join([_dir, '*']))
+        return {op.basename(path): path for path in files if op.isfile(path)}
+
     def get_monitoring_checks(self):
         """Get monitoring checks objects
 
         """
         logger.debug('Getting monitoring checks')
-        plugins_dir = getattr(self, 'plugins_dir')
+        plugins_dirs = getattr(self, 'plugins_dirs')
+        monitoring_checks = []
+        for service_desc, cmd in getattr(self, 'commands').items():
+            try:
+                plugin_name = cmd.split()[0]
+            except IndexError:
+                raise ValueError('Wrong plugin command: {}'.format(cmd))
 
-        if not op.isdir(plugins_dir):
-            raise IOError('Wrong plugins_dir: {}'.find(plugins_dir))
+            if plugin_name in self.plugins_idx:
+                monitoring_checks.append(
+                    MonitoringCheck(
+                        getattr(self, 'hostname'),
+                        service_desc,
+                        self.plugins_idx[plugin_name]
+                    )
+                )
+            else:
+                raise ValueError(
+                    "Plugin '{}' is not found in {}".format(
+                        plugin_name, plugins_dirs)
+                )
 
-        monitoring_checks = [
-            MonitoringCheck(
-                getattr(self, 'hostname'),
-                service_desc,
-                '/'.join([plugins_dir, cmd])
-            )
-            for service_desc, cmd in getattr(self, 'commands').items()
-        ]
         logger.debug(monitoring_checks)
         return monitoring_checks
 

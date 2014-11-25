@@ -6,7 +6,9 @@
     "username": "anonymous",
     "password": "qwerty"
   },
-  "plugins_dir": "/usr/lib/nagios/plugins",
+  "plugins_dirs": [
+    "/usr/lib/nagios/plugins"
+  ],
   "commands": {
     "Disk/": "check_disk -w 10% -c 5% -p /",
     "Load": "check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
