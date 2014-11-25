@@ -10,16 +10,19 @@ from urllib import urlencode
 import json
 
 import os.path as op
-from shuriken.config import LOG_PATH, HTTP_TIMEOUT
 import requests
 import re
+
+
+DEFAULT_HTTP_TIMEOUT = 120
+DEFAULT_LOG_PATH = '/tmp/shuriken.log'
 
 
 def setup_logging(filename=None):
     logging.basicConfig(
         format=u'%(asctime)s %(levelname)s [%(name)s] %(message)s',
         level=logging.DEBUG,
-        filename=filename or LOG_PATH
+        filename=filename or DEFAULT_LOG_PATH
     )
 
 
@@ -177,8 +180,17 @@ class Config(object):
 
         """
         logger.debug('Getting monitoring checks')
+        plugins_dir = getattr(self, 'plugins_dir')
+
+        if not op.isdir(plugins_dir):
+            raise IOError('Wrong plugins_dir: {}'.find(plugins_dir))
+
         monitoring_checks = [
-            MonitoringCheck(getattr(self, 'hostname'), service_desc, cmd)
+            MonitoringCheck(
+                getattr(self, 'hostname'),
+                service_desc,
+                '/'.join([plugins_dir, cmd])
+            )
             for service_desc, cmd in getattr(self, 'commands').items()
         ]
         logger.debug(monitoring_checks)
@@ -289,7 +301,7 @@ class MonitoringAgent(object):
             response = requests.post(
                 self.config.server_url, data,
                 headers=self.DEFAULT_HTTP_HEADERS,
-                timeout=HTTP_TIMEOUT,
+                timeout=DEFAULT_HTTP_TIMEOUT,
                 auth=(self.config.server['username'],
                       self.config.server['password'])
             )
