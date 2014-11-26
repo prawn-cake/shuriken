@@ -92,6 +92,7 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsInstance(config.commands, dict)
         self.assertIsInstance(config.plugins_idx, dict)
         self.assertTrue(config.plugins_dirs)
+        self.assertTrue(config.hostname)
         self.assertTrue(config.server['host'])
         self.assertTrue(config.server['username'])
         self.assertTrue(config.server['password'])
