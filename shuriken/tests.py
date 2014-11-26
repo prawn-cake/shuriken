@@ -44,6 +44,11 @@ class MonitoringCheckTestCase(unittest.TestCase):
 
 
 class ConfigTestCase(unittest.TestCase):
+    def setUp(self):
+        self.mock_plugins = [
+            'check_disk', 'check_load', 'check_mem', 'check_swap'
+        ]
+
     def test_config(self):
         raw_txt_config = """{
           "server": {
@@ -53,7 +58,7 @@ class ConfigTestCase(unittest.TestCase):
             "user": "",
             "password": ""
           },
-          "plugins_dir": "/tmp",
+          "plugins_dirs": ["/tmp", "/usr"],
           "commands": {
             "Disk/": "check_disk -w 10% -c 5% -p /",
             "Load": "check_load -w2.50,2.60,2.60 -c2.9,2.9,2.9",
@@ -66,7 +71,8 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsInstance(config, Config)
         self.assertIsInstance(config.server, dict)
         self.assertIsInstance(config.commands, dict)
-        self.assertTrue(config.plugins_dir)
+        self.assertIsInstance(config.plugins_idx, dict)
+        self.assertTrue(config.plugins_dirs)
         # check parameters
         self.assertEqual(config.server['port'], 7760)
         self.assertEqual(
@@ -75,6 +81,12 @@ class ConfigTestCase(unittest.TestCase):
         )
 
         # test monitoring checks
+
+        # mock plugins_dirs
+        config.plugins_idx = {
+            plugin_name: '/'.join(['/tmp', plugin_name])
+            for plugin_name in self.mock_plugins
+        }
         monitoring_checks = config.get_monitoring_checks()
         for check in monitoring_checks:
             self.assertIsInstance(check, MonitoringCheck)

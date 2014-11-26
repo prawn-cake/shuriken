@@ -12,12 +12,13 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name='shuriken',
-    version='0.1.2',
+    version='0.1.3',
     packages=['shuriken'],
     url='https://github.com/prawn-cake/shuriken.git',
     license='MIT',
     author='prawn-cake',
     author_email='ekimovsky.maksim@gmail.com',
-    description='Shuriken is a monitoring agent which allows to do passive checks for Shinken monitoring system vie mod-ws-arbiter.',
+    description='Shuriken is a monitoring agent which allows to do passive '
+                'checks for Shinken monitoring system vie mod-ws-arbiter.',
     install_requires=reqs
 )
