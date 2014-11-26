@@ -198,6 +198,9 @@ class Config(object):
         if wrong_dirs:
             raise IOError('Wrong plugins_dirs: {}'.format(wrong_dirs))
 
+        logger.debug('Plugins dirs are inspected. '
+                     'Founded plugins: {}'.format(self.plugins_idx))
+
     @classmethod
     def _get_plugins_in_directory(cls, _dir):
         files = glob.glob('/'.join([_dir, '*']))
@@ -365,5 +368,6 @@ if __name__ == '__main__':
         agent = MonitoringAgent(config)
         agent.run()
     else:
-        print("USAGE: python {} -H <host> -S <desc> -C <cmd> "
-              "--log <path_to_log>".format(op.basename(__file__)))
+        print("OPTIONS: -C <config> "
+              "[-H <hostname>] "
+              "[--log <path_to_log>]")
