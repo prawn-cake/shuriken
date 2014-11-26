@@ -74,7 +74,12 @@ class MonitoringCheck(object):
             self.__class__.__name__, self.hostname, self.service)
 
     @staticmethod
-    def stop_commands_check(full_command):
+    def sanitize_command(full_command):
+        """Check command safety
+
+        :param full_command: raw command string
+        :return: True :raise ForbiddenCheckError:
+        """
         match = MonitoringCheck.STOP_COMMANDS_REGEXP.search(full_command)
         if match:
             raise ForbiddenCheckError("Found stop command pattern: {}. "
@@ -86,7 +91,7 @@ class MonitoringCheck(object):
 
         :return: dict result
         """
-        MonitoringCheck.stop_commands_check(self.command)
+        MonitoringCheck.sanitize_command(self.command)
         logger.info("Execute check '{}' --> '{}'".format(self.service, self.command))
         self.ts = int(time.time())
         result_params = dict(
@@ -330,11 +335,11 @@ class MonitoringAgent(object):
         :return:
         """
         result_list = self.manager.get_result()  # [MonitoringCheckResult(), ]
-        hostname = self.config.server['hostname']
+        host = self.config.server['host']
 
         data = '&'.join(
             [check_result.get_url_encoded_string() for check_result in result_list] +
-            [urlencode(dict(host_name=hostname, return_code=0, output='Host UP'))])
+            [urlencode(dict(host_name=host, return_code=0, output='Host UP'))])
 
         logger.info("Sending request: {}".format(data))
         try:
