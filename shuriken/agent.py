@@ -341,7 +341,7 @@ class MonitoringAgent(object):
             [check_result.get_url_encoded_string() for check_result in result_list] +
             [urlencode(dict(host_name=host, return_code=0, output='Host UP'))])
 
-        logger.info("Sending request: {}".format(data))
+        logger.info("Sending request data: {}".format(data))
         try:
             response = requests.post(
                 self.config.server_url, data,
@@ -368,7 +368,8 @@ if __name__ == '__main__':
 
     if args.config:
         setup_logging(args.log)
-        hostname = getattr(args, 'hostname', Config.get_default_hostname())
+        hostname = args.hostname or Config.get_default_hostname()
+        logger.info('Machine hostname: {}'.format(hostname))
         config = ConfigReader.read_from_file(args.config, hostname=hostname)
         agent = MonitoringAgent(config)
         agent.run()
