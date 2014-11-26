@@ -12,7 +12,7 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name='shuriken',
-    version='0.1.3',
+    version='0.1.4',
     packages=['shuriken'],
     url='https://github.com/prawn-cake/shuriken.git',
     license='MIT',
